@@ -1,0 +1,190 @@
+
+//import com.saucelabs.common.SauceOnDemandAuthentication; 
+//import com.saucelabs.common.SauceOnDemandSessionIdProvider; 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TestName;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.Select;
+
+import java.io.File;
+import java.net.URL;
+
+import jxl.Sheet;
+import jxl.Workbook;
+
+import static junit.framework.Assert.assertEquals;
+
+/**
+ * Simple {@link RemoteWebDriver} test that demonstrates how to run your Selenium tests with <a href="http://ondemand.saucelabs.com/ondemand">Sauce OnDemand</a>.
+ * *
+ * @author Ross Rowe
+ */
+public class sauce {
+
+    private WebDriver driver;
+    private String baseUrl;
+    @Before
+	public void setUp() throws Exception {
+
+        DesiredCapabilities capabillities = DesiredCapabilities.firefox();
+       // capabillities.setCapability("version", "5.0");
+        //capabillities.setCapability("platform", Platform.WINDOWS);
+        this.driver = new RemoteWebDriver(
+					  new URL("http://dhandapani88:36fd13ab-2347-46ff-9992-7296e7dd35b4@ondemand.saucelabs.com:80/wd/hub"),
+					  capabillities);
+       baseUrl = "http://www.singpost.com/";
+    }
+
+    @Test
+		public void testUntitled() throws Exception {
+    	    
+    		  int l=0;
+    		  int i=0;
+    	//	  calculatePostage c=new calculatePostage();
+    		  File f=new File("D:\\Dhandapani\\works\\payment.xls");
+    			 Workbook w=Workbook.getWorkbook(f);
+    			 Sheet s=w.getSheet(0);
+    			
+    			int totalrows = s.getRows();
+    			
+    			do	{
+    				l=l+1;
+    				
+    				System.out.println(totalrows);
+    				
+    				
+    					String country = s.getCell(0, i).getContents();
+    					String weight = s.getCell(1, i).getContents();
+    					String dtime = s.getCell(2,i).getContents();
+    					String toZip= s.getCell(7,i).getContents();
+    					String totown=s.getCell(8,i).getContents();
+    					String fromZip= s.getCell(4,i).getContents();
+    					String sendName=s.getCell(15,i).getContents();
+    					String wei= s.getCell(11,i).getContents();
+    					String len=s.getCell(12,i).getContents();
+    					String wid= s.getCell(13,i).getContents();
+    					String hei=s.getCell(14,i).getContents();
+    					String froName= s.getCell(15,i).getContents();
+    					String tName=s.getCell(17,i).getContents();
+    					String froadd= s.getCell(16,i).getContents();
+    					String tAdd=s.getCell(18,i).getContents();
+    					String fEmail=s.getCell(19,i).getContents();
+    				    String fPhone=s.getCell(20,i).getContents();
+    					
+    			/*	    String PROXY = "localhost:8080";
+
+    				    org.openqa.selenium.Proxy proxy = new org.openqa.selenium.Proxy();
+    				    proxy.setHttpProxy(PROXY)
+    				         .setFtpProxy(PROXY)
+    				         .setSslProxy(PROXY);
+    				    DesiredCapabilities cap = new DesiredCapabilities();
+    				    cap.setCapability(CapabilityType.PROXY, proxy);*/
+
+    				//    WebDriver driver = new FirefoxDriver(cap);
+
+    				    
+    				    
+    					
+    		driver.get(baseUrl + "/");
+    	    driver.manage().window().maximize();
+    	//    c.captureScreen();
+    	    String winHandleBefore = driver.getWindowHandle();
+    	    new Select(driver.findElement(By.id("country_code"))).selectByVisibleText(country);
+    	    driver.findElement(By.id("weight")).clear();
+    	    driver.findElement(By.id("weight")).sendKeys(weight);
+    	    new Select(driver.findElement(By.id("delivery_time"))).selectByVisibleText(dtime);
+    	//    c.captureScreen();
+    	    driver.findElement(By.id("btn_submit_calculate")).click();
+    	 // driver.wait(1000);
+    	    driver.findElement(By.cssSelector("#GridView1_ctl04_TempHyperLink1 > img")).click();
+    	    for(String winHandle : driver.getWindowHandles()){
+    	        driver.switchTo().window(winHandle);
+    	    }
+    	//    c.captureScreen();
+    	  //*[@id='label-new-eazy2ship']
+    	driver.findElement(By.id("niss-login-sendnow-button")).click();
+    //	c.captureScreen();
+    	new Select(driver.findElement(By.id("shipto-country"))).selectByVisibleText("India");
+    	driver.findElement(By.id("shipto-postcode")).clear();
+    	driver.findElement(By.id("shipto-postcode")).sendKeys(toZip);
+    	driver.findElement(By.id("shipto-town")).clear();
+    	driver.findElement(By.id("shipto-town")).sendKeys(totown);
+    	driver.findElement(By.id("shipfrom-postcode")).sendKeys(fromZip);
+    	driver.findElement(By.id("shipRef_Reference1")).clear();
+    	driver.findElement(By.id("shipRef_Reference1")).sendKeys(sendName);
+    	driver.findElement(By.id("intl-nd-phisical-weight-9")).clear();
+    	driver.findElement(By.id("intl-nd-phisical-weight-9")).sendKeys(wei);
+    	driver.findElement(By.id("intl-nd-length-9")).clear();
+    	driver.findElement(By.id("intl-nd-length-9")).sendKeys(len);
+    	driver.findElement(By.id("intl-nd-width-9")).clear();
+    	driver.findElement(By.id("intl-nd-width-9")).sendKeys(wid);
+    	driver.findElement(By.id("intl-nd-height-9")).clear();
+    	driver.findElement(By.id("intl-nd-height-9")).sendKeys(hei);
+    	//driver.findElement(By.cssSelector("#shipment-next-step > div.standard-button-left > div.standard-button-right > div.standard-button-center > button[type=\"button\"]")).click();
+
+    	//driver.findElement(By.cssSelector("#shipment-next-step-2 > div.standard-button-left > div.standard-button-right > div.standard-button-center > button[type=\"button\"]")).click();
+    //	c.captureScreen();
+    	driver.findElement(By.xpath("//*[@id='shipment-next-step']/div/div/div/button")).click();
+    //	c.captureScreen();
+    	driver.findElement(By.id("8_1_21959")).click();
+    	Thread.sleep(2000);
+   // 	c.captureScreen();
+    	driver.findElement(By.xpath("//*[@id='shipment-next-step-2']/div/div/div/button")).click();
+    	Thread.sleep(2000);
+    	driver.findElement(By.id("shipfrom-name1")).clear();
+    	driver.findElement(By.id("shipfrom-name1")).sendKeys(froName);
+    	driver.findElement(By.id("shipto-name1")).clear();
+    	driver.findElement(By.id("shipto-name1")).sendKeys(tName);
+    	driver.findElement(By.id("shipfrom-address1")).clear();
+    	driver.findElement(By.id("shipfrom-address1")).sendKeys(froadd);
+    	driver.findElement(By.id("shipto-address1")).clear();
+    	driver.findElement(By.id("shipto-address1")).sendKeys(tAdd);
+    	driver.findElement(By.id("shipfrom-contact-email")).clear();
+    	driver.findElement(By.id("shipfrom-contact-email")).sendKeys(fEmail);
+    	driver.findElement(By.id("shipto-contact-email")).clear();
+    	driver.findElement(By.id("shipto-contact-email")).sendKeys("raju@gmail.com");
+    	driver.findElement(By.id("shipfrom-contact-phone")).clear();
+    	driver.findElement(By.id("shipfrom-contact-phone")).sendKeys(fPhone);
+    	driver.findElement(By.id("shipto-contact-phone")).clear();
+    	driver.findElement(By.id("shipto-contact-phone")).sendKeys("8521425236");
+    //	c.captureScreen();
+    	driver.findElement(By.xpath("//div[@id='shipfrom-part']/div/ul[3]/li[4]/label")).click();
+    //	c.captureScreen();
+    	driver.findElement(By.cssSelector("#shipment-next-step-3 > div.standard-button-left > div.standard-button-right > div.standard-button-center > button[type=\"button\"]")).click();
+    	new Select(driver.findElement(By.id("sl-drop-off"))).selectByVisibleText("Ang Mo Kio Central Post Office");
+    //	c.captureScreen();
+    	driver.findElement(By.cssSelector("div.standard-button-right.standard-button-right-gray > div.standard-button-center > button[type=\"button\"]")).click();
+    	/*driver.findElement(By.id("collection-request")).click();
+    	driver.findElement(By.cssSelector("#btn-collection-request-enabled > div.standard-button-left > div.standard-button-right > div.standard-button-center > button[type=\"button\"]")).click();
+    	new Select(driver.findElement(By.id("available-collection-date-time"))).selectByVisibleText("13/08/2013 09:00 to 09:45");
+    	driver.findElement(By.cssSelector("#btn-processShipSingle > div.standard-button-left > div.standard-button-right > div.standard-button-center")).click();*/
+    	driver.findElement(By.cssSelector("#optional-button-0 > div.standard-button-left > div.standard-button-right > div.standard-button-center > button[type=\"button\"]")).click();
+    	driver.findElement(By.xpath("(//button[@type='button'])[9]")).click();
+    //	c.captureScreen();
+    	driver.findElement(By.id("b_Accept_1")).click();
+    //	c.captureScreen();
+    	driver.findElement(By.cssSelector("#optional-button-0 > div.standard-button-left > div.standard-button-right > div.standard-button-center > button[type=\"button\"]")).click();
+    //	c.captureScreen();
+    	driver.findElement(By.cssSelector("#btn-cancel-payment > div.standard-button-left > div.standard-button-right > div.standard-button-center > button[type=\"button\"]")).click();
+    //	c.captureScreen();
+    	driver.findElement(By.xpath("(//input[@name='paymentMode'])[2]")).click();
+
+
+    	//driver.switchTo().window(winHandleBefore);
+    	driver.close();
+    	i=i+1;
+    			}while(i<totalrows); }
+
+    @After
+	public void tearDown() throws Exception {
+        driver.quit();
+    }
+
+}
